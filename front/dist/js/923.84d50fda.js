@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkfront"]=self["webpackChunkfront"]||[]).push([[923],{44923:function(n,e,t){t.r(e),t.d(e,{default:function(){return a}});var u=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("div",[n._v(" Пока ничего ")])},r=[],l={},f=l,c=t(43736),s=(0,c.Z)(f,u,r,!1,null,null,null),a=s.exports}}]);
+//# sourceMappingURL=923.84d50fda.js.map

@@ -1,0 +1,9 @@
+[{'dateend': '2023-08-30', 'datestart': '2023-08-11', 'description': 'sdfsdfsdf', 'difficult': 3, 'id': 72,
+ 'longname': '123', 'name': 'Новая задача123', 
+ 'parent': {'id': 63}, 
+ 'responsible': {'givenName': 'Виталий Владимирович', 'id': 421, 'sn': 'Сапунов'}, 
+ 'status': {'id': 1, 'name': 'Запланирована'}, 'task_work': [], 
+ 'comment': {'text': 'Не предоставленsz', 'datet': ''}, 
+ 'planning': '2023-09-28', 'keyy': 1, 'picker': False},
+  {'dateend': '2023-09-15', 'datestart': '2023-09-08', 
+  'description': 'wdqw', 'difficult': 2, 'id': 71, 'longname': 'za', 'name': 'Документация', 'parent': {'id': 63}, 'responsible': {'givenName': 'Виталий Владимирович', 'id': 421, 'sn': 'Сапунов'}, 'status': {'id': 2, 'name': 'Исполнение'}, 'task_work': [{'dateend': '2023-09-09', 'datestart': '2023-09-08', 'description': 'lj.jk', 'difficult': 3, 'id': 93, 'longname': '', 'name': 'Тестирование', 'parent': {'id': 71, 'parent': {'id': 63}}, 'responsible': {'givenName': 'Виталий Владимирович', 'id': 421, 'sn': 'Сапунов'}, 'status': {'id': 5, 'name': 'Завершена'}, 'work_assignment': [], 'comment': {'text': 'не принятоsdxxxxx', 'author': {'avatar': '/static/default/avatardef.png', 'id': 421, 'sn': 'Сапунов'}}, 'planning': '2023-09-13'}], 'comment': {'text': 'ujnjjzsscaacswaasdasdaaadadwqdcz', 'author': {'avatar': '/static/default/avatardef.png', 'id': 421, 'sn': 'Сапунов'}}, 'planning': '2023-09-15', 'keyy': 2, 'picker': False}, {'dateend': '2023-09-09', 'datestart': '2023-09-08', 'description': 'lj.jk', 'difficult': 3, 'id': 93, 'longname': '', 'name': 'Тестирование', 'parent': {'id': 71, 'parent': {'id': 63}}, 'responsible': {'givenName': 'Виталий Владимирович', 'id': 421, 'sn': 'Сапунов'}, 'status': {'id': 5, 'name': 'Завершена'}, 'work_assignment': [], 'comment': {'text': 'не принятоsdxxxxx', 'author': {'avatar': '/static/default/avatardef.png', 'id': 421, 'sn': 'Сапунов'}}, 'planning': '2023-09-13', 'keyy': '2.1', 'picker': False}]

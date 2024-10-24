@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkfront"]=self["webpackChunkfront"]||[]).push([[697],{62697:function(n,e,t){t.r(e),t.d(e,{default:function(){return a}});var r=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("div",[n._v(" Доска ")])},u=[],c={},f=c,l=t(43736),s=(0,l.Z)(f,r,u,!1,null,"274c9229",null),a=s.exports}}]);
+//# sourceMappingURL=697.7741f8e3.js.map

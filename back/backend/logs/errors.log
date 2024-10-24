@@ -1,0 +1,82 @@
+2023-02-22 12:36:51.731 | ERROR    | orm.redis:producer_handler:99 - send_text() missing 1 required positional argument: 'data'
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+
+  File "C:\Users\systemsupport\AppData\Local\Programs\Python\Python39\lib\multiprocessing\spawn.py", line 116, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 324
+               │     └ 3
+               └ <function _main at 0x000001EB53DBE790>
+
+  File "C:\Users\systemsupport\AppData\Local\Programs\Python\Python39\lib\multiprocessing\spawn.py", line 129, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 324
+           │    └ <function BaseProcess._bootstrap at 0x000001EB53C5C550>
+           └ <SpawnProcess name='SpawnProcess-43' parent=8988 started>
+
+  File "C:\Users\systemsupport\AppData\Local\Programs\Python\Python39\lib\multiprocessing\process.py", line 315, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x000001EB53C58B80>
+    └ <SpawnProcess name='SpawnProcess-43' parent=8988 started>
+
+  File "C:\Users\systemsupport\AppData\Local\Programs\Python\Python39\lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x000001EB534DDD00>, 'target': <bound method Server.run of <uvicorn.server.Server...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-43' parent=8988 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-43' parent=8988 started>
+    │    └ <function subprocess_started at 0x000001EB55D0FAF0>
+    └ <SpawnProcess name='SpawnProcess-43' parent=8988 started>
+
+  File "C:\Users\systemsupport\Desktop\Project\SUPNEW\env\lib\site-packages\uvicorn\_subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=692, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x000001EB534DDFD0>>
+
+  File "C:\Users\systemsupport\Desktop\Project\SUPNEW\env\lib\site-packages\uvicorn\server.py", line 60, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           │       │   │    │             └ [<socket.socket fd=692, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('127.0.0.1', 8000)>]
+           │       │   │    └ <function Server.serve at 0x000001EB55D0AEE0>
+           │       │   └ <uvicorn.server.Server object at 0x000001EB534DDFD0>
+           │       └ <function run at 0x000001EB53DCB940>
+           └ <module 'asyncio' from 'C:\\Users\\systemsupport\\AppData\\Local\\Programs\\Python\\Python39\\lib\\asyncio\\__init__.py'>
+
+  File "C:\Users\systemsupport\AppData\Local\Programs\Python\Python39\lib\asyncio\runners.py", line 44, in run
+    return loop.run_until_complete(main)
+           │    │                  └ <coroutine object Server.serve at 0x000001EB5612B540>
+           │    └ <function BaseEventLoop.run_until_complete at 0x000001EB5597D280>
+           └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+
+  File "C:\Users\systemsupport\AppData\Local\Programs\Python\Python39\lib\asyncio\base_events.py", line 634, in run_until_complete
+    self.run_forever()
+    │    └ <function BaseEventLoop.run_forever at 0x000001EB5597D1F0>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+
+  File "C:\Users\systemsupport\AppData\Local\Programs\Python\Python39\lib\asyncio\base_events.py", line 601, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x000001EB5597ED30>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+
+  File "C:\Users\systemsupport\AppData\Local\Programs\Python\Python39\lib\asyncio\base_events.py", line 1905, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x000001EB5590CC10>
+    └ <Handle <TaskWakeupMethWrapper object at 0x000001EB5BC29EB0>(<Future finished result=None>)>
+
+  File "C:\Users\systemsupport\AppData\Local\Programs\Python\Python39\lib\asyncio\events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle <TaskWakeupMethWrapper object at 0x000001EB5BC29EB0>(<Future finished result=None>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle <TaskWakeupMethWrapper object at 0x000001EB5BC29EB0>(<Future finished result=None>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle <TaskWakeupMethWrapper object at 0x000001EB5BC29EB0>(<Future finished result=None>)>
+
+> File "C:\Users\systemsupport\Desktop\Project\SUPNEW\back\backend\.\orm\redis.py", line 92, in producer_handler
+    await ws.send_text(message.get('data'))
+          │  │         │       └ <method 'get' of 'dict' objects>
+          │  │         └ {'type': 'message', 'pattern': None, 'channel': 'chat:26', 'data': '{\n    "action": "newmessageincome",\n    "payload": {\n ...
+          │  └ <function WebSocket.send_text at 0x000001EB5678BC10>
+          └ <class 'starlette.websockets.WebSocket'>
+
+TypeError: send_text() missing 1 required positional argument: 'data'

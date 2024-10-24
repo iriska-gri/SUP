@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="ISUP" id="Project-241e" database="LogicalDesign" >
+	<schema name="ISUP" >
+		<table name="ActH" prior="Act" >
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="Pk_ActH_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="Action" prior="Entity" >
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="Pk_Action_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Action_HistoryProject" to_schema="ISUP" to_table="HistoryProject" type="Identifying" >
+				<fk_column name="pk" pk="actions" />
+			</fk>
+		</table>
+		<table name="ActionTask" prior="Entity" >
+			<column name="pk" prior="id" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="fk" type="int" jt="4" />
+			<column name="tasks" type="int" jt="4" />
+			<index name="Pk_ActionTask_id" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<index name="Unq_ActionTask_tasks" unique="UNIQUE_KEY" >
+				<column name="tasks" />
+			</index>
+			<fk name="Fk_ActionTask_HistoryProject" to_schema="ISUP" to_table="HistoryProject" type="Identifying" >
+				<fk_column name="fk" pk="pk" />
+			</fk>
+		</table>
+		<table name="Advt" prior="Entity" >
+			<comment><![CDATA[Объявление]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="message" type="varchar" length="100000" jt="12" />
+			<column name="adresat" type="int" jt="4" />
+			<column name="sender" type="int" jt="4" />
+			<column name="sendedat" type="datetime" jt="93" >
+				<defo><![CDATA[systimestamp]]></defo>
+			</column>
+			<index name="Pk_Advt_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Advt_Otdel" to_schema="ISUP" to_table="Otdel" type="Identifying" >
+				<fk_column name="adresat" pk="pk" />
+			</fk>
+			<fk name="Fk_Advt_Users" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="sender" pk="pk" />
+			</fk>
+		</table>
+		<table name="AssociationProj" prior="Association" >
+			<comment><![CDATA[Ассоциативная таблица, совмещающая проекты и пользователей.
+Дополнительное поле - involved = вовлеченность (принимает-ли пользователь участие в задачах проекта]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="user_pk" prior="user" type="int" jt="4" />
+			<column name="project_pk" type="int" jt="4" />
+			<column name="involved" prior="role" type="boolean" jt="-7" >
+				<comment><![CDATA[по дефолту участник]]></comment>
+			</column>
+			<index name="Pk_AssociationProj_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<index name="Unq_AssociationProj_project_pk" unique="UNIQUE_KEY" >
+				<column name="project_pk" />
+			</index>
+			<index name="Unq_AssociationProj_user_pk" unique="UNIQUE_KEY" >
+				<column name="user_pk" />
+			</index>
+		</table>
+		<table name="Canban" prior="Canban2" >
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="users" type="int" jt="4" />
+			<column name="author" type="int" jt="4" />
+			<index name="Pk_Canban2_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Canban_Users" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="author" pk="pk" />
+			</fk>
+			<fk name="Fk_Canban_Users_0" to_schema="ISUP" to_table="Users" type="ManyToMany" >
+				<fk_column name="users" pk="pk" />
+			</fk>
+		</table>
+		<table name="CanbanStage" prior="Entity" >
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="canban" type="int" jt="4" />
+			<column name="tasks" type="int" jt="4" />
+			<column name="notes" type="int" length="600" jt="4" />
+			<index name="Pk_CanbanStage_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_CanbanStage_Canban2" to_schema="ISUP" to_table="Canban" type="Identifying" >
+				<fk_column name="canban" pk="pk" />
+			</fk>
+			<fk name="Fk_CanbanStage_Task" to_schema="ISUP" to_table="Task" type="ManyToMany" >
+				<fk_column name="tasks" pk="pk" />
+			</fk>
+			<fk name="Fk_CanbanStage_Notes" to_schema="ISUP" to_table="Notes" type="ManyToMany" >
+				<fk_column name="notes" pk="pk" />
+			</fk>
+		</table>
+		<table name="Canban_x_note" prior="Canban_x_" >
+			<comment><![CDATA[Под вопросом отношение канбана и заметок]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="note_pk" type="int" length="600" jt="4" />
+			<column name="canban_pk" type="int" jt="4" />
+			<column name="stage" type="int" jt="4" />
+			<index name="Pk_Canban_x_note_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Canban_x_note_Notes" to_schema="ISUP" to_table="Notes" type="Identifying" >
+				<fk_column name="note_pk" pk="pk" />
+			</fk>
+		</table>
+		<table name="Canban_x_task" prior="Entity" >
+			<comment><![CDATA[Под вопросом отношение канбана и задач]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="task_pk" type="int" jt="4" />
+			<column name="stage" type="varchar" length="255" jt="12" />
+			<column name="canban_pk" type="int" jt="4" />
+			<index name="Pk_Canban_x_task_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Canban_x_task_Task" to_schema="ISUP" to_table="Task" type="Identifying" >
+				<fk_column name="task_pk" pk="pk" />
+			</fk>
+		</table>
+		<table name="CheckRunStatus" prior="CheckStatus" >
+			<comment><![CDATA[Статус поручения]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="Pk_CheckStatus_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="Checking" prior="ch" >
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="parent_project" type="int" jt="4" />
+			<column name="checked" type="boolean" jt="-7" />
+			<column name="description" type="varchar" length="10000" jt="12" />
+			<index name="Pk_Checking_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Checking_Project" to_schema="ISUP" to_table="Project" type="Identifying" >
+				<fk_column name="parent_project" pk="pk" />
+			</fk>
+		</table>
+		<table name="Doctype" prior="Docty[e" >
+			<comment><![CDATA[Тип документа]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="Pk_Doctype_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="Documentation" prior="Entity" >
+			<comment><![CDATA[Документация по проектам. 
+Время создания и принятий]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="parent_project" type="int" jt="4" />
+			<column name="doctype" type="int" jt="4" />
+			<column name="created" type="datetime" jt="93" />
+			<column name="accepted" type="datetime" jt="93" />
+			<index name="Pk_Documentation_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Documentation_Doctype" to_schema="ISUP" to_table="Doctype" type="Identifying" >
+				<fk_column name="doctype" pk="pk" />
+			</fk>
+			<fk name="Fk_Documentation_Project" to_schema="ISUP" to_table="Project" type="Identifying" >
+				<fk_column name="parent_project" pk="pk" />
+			</fk>
+		</table>
+		<table name="EventCheckListChat" prior="TascCheckListChat_0" >
+			<comment><![CDATA[Чаты каждого совещания]]></comment>
+			<column name="pk" type="bigint" jt="-5" mandatory="y" />
+			<column name="message" type="varchar" length="5000" jt="12" />
+			<column name="sender" type="int" jt="4" />
+			<column name="datetime" type="datetime" jt="93" >
+				<defo><![CDATA[systimestamp]]></defo>
+			</column>
+			<column name="parent_Event_Check_List" prior="parent_Task_Check_List" type="int" jt="4" />
+			<index name="Pk_TascCheckListChat_pk_0" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_TascCheckListChat_Users_0" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="sender" pk="pk" />
+			</fk>
+			<fk name="Fk_TascCheckListChat_0_EventsCheckList" to_schema="ISUP" to_table="EventsCheckList" type="Identifying" >
+				<fk_column name="parent_Event_Check_List" pk="pk" />
+			</fk>
+		</table>
+		<table name="EventFilesCheckListChat" prior="FilesCheckListChat_0" >
+			<comment><![CDATA[Файлы совещания]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="parent_Event_Check_List_Chat" prior="parent_Task_Check_List_Chat" type="varchar" length="100" jt="12" />
+			<column name="sender" type="int" jt="4" />
+			<column name="datetime" type="datetime" jt="93" >
+				<defo><![CDATA[systimestamp]]></defo>
+			</column>
+			<column name="file_path" type="varchar" length="255" jt="12" />
+			<index name="Pk_FilesCheckListChat_pk_0" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_EventFilesCheckListChat_TascCheckListChat_0" to_schema="ISUP" to_table="EventCheckListChat" type="Identifying" >
+				<fk_column name="parent_Event_Check_List_Chat" pk="pk" />
+			</fk>
+			<fk name="Fk_EventFilesCheckListChat_Users" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="sender" pk="pk" />
+			</fk>
+		</table>
+		<table name="EventStatus" prior="ProjectStatus_0" spec="" >
+			<comment><![CDATA[Статусы совещаний]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="Pk_ProjectStatus_pk_0" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="Events" prior="Entity" >
+			<comment><![CDATA[Совещания]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="status" type="int" length="1" jt="4" />
+			<column name="users" prior="user" type="int" jt="4" />
+			<column name="description" type="int" jt="4" />
+			<column name="datet" prior="date" type="datetime" jt="93" >
+				<defo><![CDATA[systimestamp]]></defo>
+			</column>
+			<column name="place" type="varchar" length="255" jt="12" />
+			<column name="leader" type="int" length="255" jt="4" />
+			<index name="Pk_Events_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Events_Users" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="leader" pk="pk" />
+			</fk>
+			<fk name="Fk_Events_Users_0" to_schema="ISUP" to_table="Users" type="ManyToMany" >
+				<fk_column name="users" pk="pk" />
+			</fk>
+			<fk name="Fk_Events_EventStatus" to_schema="ISUP" to_table="EventStatus" type="Identifying" >
+				<fk_column name="status" pk="pk" />
+			</fk>
+		</table>
+		<table name="EventsCheckList" prior="EventsCheckList_0" >
+			<comment><![CDATA[Чеклисты совещаний (повестка)]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="parent_Event_CheckList" prior="event_CheckList" type="int" jt="4" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="user" type="int" length="255" jt="4" />
+			<column name="checked" type="boolean" jt="-7" />
+			<column name="datestart" type="datetime" jt="93" />
+			<column name="timeneeded" type="bigint" jt="-5" />
+			<index name="Pk_TaskCheckList_pk_0" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_TaskCheckList_Users_0" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="user" pk="pk" />
+			</fk>
+			<fk name="Fk_EventsCheckList_Events" to_schema="ISUP" to_table="Events" type="Identifying" >
+				<fk_column name="parent_Event_CheckList" pk="pk" />
+			</fk>
+		</table>
+		<table name="FilesCheckListChat" prior="FilesCh" >
+			<comment><![CDATA[Файлы чеклиста или обзие файлы задачи]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="parent_Task_Check_List" prior="parent_Task_Check_List_Chat" type="varchar" length="100" jt="12" />
+			<column name="sender" type="int" jt="4" />
+			<column name="datetime" type="datetime" jt="93" >
+				<defo><![CDATA[systimestamp]]></defo>
+			</column>
+			<column name="file_path" type="varchar" length="255" jt="12" />
+			<index name="Pk_FilesCheckListChat_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_FilesCheckListChat_TaskCheckList" to_schema="ISUP" to_table="TaskCheckList" type="Identifying" >
+				<fk_column name="parent_Task_Check_List" pk="pk" />
+			</fk>
+		</table>
+		<table name="Hardskill" prior="Entity" >
+			<comment><![CDATA[Хардскиллы для пользователей системы]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="group" type="int" jt="4" />
+			<index name="Pk_Hardskill_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Hardskill_Users" to_schema="ISUP" to_table="Users" type="ManyToMany" >
+				<fk_column name="pk" pk="hardskills" />
+			</fk>
+			<fk name="Fk_Hardskill_HardskillGroup" to_schema="ISUP" to_table="HardskillGroup" type="Identifying" >
+				<fk_column name="group" pk="pk" />
+			</fk>
+		</table>
+		<table name="HardskillGroup" prior="HArdS" >
+			<comment><![CDATA[Таблица групп Хардскиллов]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" />
+			<index name="Pk_HardskillGroup_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="History" prior="Hisory" >
+			<comment><![CDATA[level:
+1 - Проект
+2 - Задача
+3- подзадача
+4 - чат
+5 - файл
+id= id проекта, задачи, подзадачи, чата, файла]]></comment>
+			<column name="pk" type="date" jt="91" mandatory="y" />
+			<column name="text" type="varchar" length="250" jt="12" />
+			<column name="level" prior="parenproject_pk" type="bigint" jt="-5" />
+			<column name="parentProject" prior="parentTask" type="bigint" jt="-5" />
+			<column name="datecreate" type="datetime" jt="93" />
+			<column name="action" type="int" jt="4" />
+			<index name="Pk_History_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_History_Project" to_schema="ISUP" to_table="Project" type="Identifying" >
+				<fk_column name="parentProject" pk="pk" />
+			</fk>
+			<fk name="Fk_History_ActH" to_schema="ISUP" to_table="ActH" type="Identifying" >
+				<fk_column name="action" pk="pk" />
+			</fk>
+		</table>
+		<table name="HistoryProject" prior="HistoryAll" >
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="projects" type="int" jt="4" />
+			<column name="actions" type="int" jt="4" />
+			<index name="Pk_HistoryAll_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<index name="Unq_HistoryProject_actions" unique="UNIQUE_KEY" >
+				<column name="actions" />
+			</index>
+			<fk name="Fk_HistoryAll_Project" to_schema="ISUP" to_table="Project" type="Identifying" >
+				<fk_column name="projects" pk="pk" />
+			</fk>
+		</table>
+		<table name="Leave" prior="Entity" >
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="user" type="int" jt="4" />
+			<column name="datestart" type="date" jt="91" />
+			<column name="dateend" type="date" jt="91" />
+			<column name="leavetype" type="int" jt="4" />
+			<index name="Pk_Leave_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Leave_Users" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="user" pk="pk" />
+			</fk>
+			<fk name="Fk_Leave_Leavetype" to_schema="ISUP" to_table="Leavetype" type="Identifying" >
+				<fk_column name="leavetype" pk="pk" />
+			</fk>
+		</table>
+		<table name="Leavetype" prior="Entity" >
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="Pk_Leavetype_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="Notes" prior="MyNotes" >
+			<comment><![CDATA[Заметки]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="message" type="varchar" length="255" jt="12" >
+				<comment><![CDATA[Текст заметки.
+В случае, если note= False, Отсутствует]]></comment>
+			</column>
+			<column name="user" type="int" jt="4" >
+				<comment><![CDATA[Автор заметки/задачной заметки]]></comment>
+			</column>
+			<column name="datetime" type="datetime" jt="93" >
+				<defo><![CDATA[systimestamp]]></defo>
+			</column>
+			<column name="note" type="boolean" length="600" jt="-7" >
+				<comment><![CDATA[поле для обозначения (заметка - true). Иначе это задачная заметка]]></comment>
+			</column>
+			<column name="visiblefor" type="int" jt="4" >
+				<comment><![CDATA[Видимость для пользователей]]></comment>
+			</column>
+			<index name="Pk_MyNotes_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_MyNotes_Users" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="user" pk="pk" />
+			</fk>
+			<fk name="Fk_Notes_Users" to_schema="ISUP" to_table="Users" type="ManyToMany" >
+				<fk_column name="visiblefor" pk="pk" />
+			</fk>
+		</table>
+		<table name="Noteschecklist" prior="Notescheck" >
+			<comment><![CDATA[Чеклист задачной заметки]]></comment>
+			<column name="pk" type="datetime" jt="93" mandatory="y" />
+			<column name="parent_note" type="int" length="600" jt="4" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="checked" type="boolean" jt="-7" />
+			<index name="Pk_Noteschecklist_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Noteschecklist_Notes" to_schema="ISUP" to_table="Notes" type="Identifying" >
+				<fk_column name="parent_note" pk="pk" />
+			</fk>
+		</table>
+		<table name="Notesfiles" prior="Entity" >
+			<comment><![CDATA[Файлы заметки/задачной заметки]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="parent_note" type="int" length="600" jt="4" />
+			<column name="file_path" type="text" jt="-1" />
+			<column name="sender" type="int" jt="4" />
+			<column name="datetime" type="datetime" jt="93" />
+			<index name="Pk_Notesfiles_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Notesfiles_Notes" to_schema="ISUP" to_table="Notes" type="Identifying" >
+				<fk_column name="parent_note" pk="pk" />
+			</fk>
+		</table>
+		<table name="Otdel" prior="Entity" >
+			<comment><![CDATA[Отделы, зарегистрированные в системе]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="Pk_Otdel_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="Position" prior="Entity" >
+			<comment><![CDATA[Должность]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="Pk_Position_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="Project" prior="P" >
+			<comment><![CDATA[Проекты системы]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" />
+			<column name="description" type="int" jt="4" />
+			<column name="status" type="int" length="1" jt="4" />
+			<column name="customer" type="varchar" length="5000" jt="12" />
+			<column name="author" prior="startman" type="int" jt="4" />
+			<column name="leader" type="int" jt="4" />
+			<column name="datestart" type="date" jt="91" />
+			<column name="dateend" type="date" jt="91" />
+			<index name="Pk_Project_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Project_ProjectStatus" to_schema="ISUP" to_table="ProjectStatus" type="Identifying" >
+				<fk_column name="status" pk="pk" />
+			</fk>
+			<fk name="Fk_Project_AssociationProj" to_schema="ISUP" to_table="AssociationProj" type="Identifying" >
+				<fk_column name="pk" pk="project_pk" />
+			</fk>
+			<fk name="Fk_Project_Users" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="author" pk="pk" />
+			</fk>
+			<fk name="Fk_Project_Users_0" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="leader" pk="pk" />
+			</fk>
+		</table>
+		<table name="ProjectStatus" prior="Entity" >
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="Pk_ProjectStatus_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="Rank" prior="Otdel_0" >
+			<comment><![CDATA[Классный чин]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="Pk_Otdel_pk_0" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="Softskill" prior="Hardskill_0" >
+			<comment><![CDATA[Навыки пользователей, не относящиеся к хардам]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="group" type="int" jt="4" />
+			<index name="Pk_Hardskill_pk_0" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Hardskill_Users_0" to_schema="ISUP" to_table="Users" type="ManyToMany" >
+				<fk_column name="pk" pk="hardskills" />
+			</fk>
+			<fk name="Fk_Softskill_SoftskillGroup" to_schema="ISUP" to_table="SoftskillGroup" type="Identifying" >
+				<fk_column name="name" pk="pk" />
+			</fk>
+		</table>
+		<table name="SoftskillGroup" prior="HardskillGroup_0" >
+			<comment><![CDATA[Группа навыков софт]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" />
+			<index name="Pk_HardskillGroup_pk_0" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="Stage" prior="Entity" >
+			<comment><![CDATA[Название этапа, которому принадлежит задача]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="Pk_Stage_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="TascCheckListChat" prior="Tasc_CheckListChat" >
+			<comment><![CDATA[Чат поручений]]></comment>
+			<column name="pk" type="bigint" jt="-5" mandatory="y" />
+			<column name="message" type="varchar" length="5000" jt="12" />
+			<column name="sender" type="int" jt="4" />
+			<column name="datetime" type="datetime" jt="93" >
+				<defo><![CDATA[systimestamp]]></defo>
+			</column>
+			<column name="parent_Task_Check_List" prior="parentTaskCheckList" type="int" jt="4" />
+			<index name="Pk_TascCheckListChat_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_TascCheckListChat_TaskCheckList" to_schema="ISUP" to_table="TaskCheckList" type="Identifying" >
+				<fk_column name="parent_Task_Check_List" pk="pk" />
+			</fk>
+			<fk name="Fk_TascCheckListChat_Users" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="sender" pk="pk" />
+			</fk>
+		</table>
+		<table name="Task" prior="Entity" >
+			<comment><![CDATA[Задачи проекта]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="parent_Project" type="int" length="100" jt="4" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="status" type="int" length="1" jt="4" />
+			<column name="description" type="varchar" length="255" jt="12" />
+			<column name="datestart" type="date" jt="91" >
+				<defo><![CDATA[sysdate]]></defo>
+			</column>
+			<column name="dateend" type="date" jt="91" >
+				<defo><![CDATA[sysdate]]></defo>
+			</column>
+			<column name="responsible" type="int" jt="4" />
+			<column name="stage" type="int" jt="4" />
+			<column name="user" type="int" jt="4" />
+			<column name="dateendchanged" type="boolean" jt="-7" >
+				<defo><![CDATA[false]]></defo>
+			</column>
+			<index name="Pk_Task_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Task_TaskStatus" to_schema="ISUP" to_table="TaskStatus" type="Identifying" >
+				<fk_column name="status" pk="pk" />
+			</fk>
+			<fk name="Fk_Task_Stage" to_schema="ISUP" to_table="Stage" type="Identifying" >
+				<fk_column name="stage" pk="pk" />
+			</fk>
+			<fk name="Fk_Task_Project" to_schema="ISUP" to_table="Project" type="Identifying" >
+				<fk_column name="parent_Project" pk="pk" />
+			</fk>
+			<fk name="Fk_Task_Users" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="responsible" pk="pk" />
+			</fk>
+			<fk name="Fk_Task_Users_0" to_schema="ISUP" to_table="Users" type="ManyToMany" >
+				<fk_column name="user" pk="pk" />
+			</fk>
+			<fk name="Fk_Task_ActionTask" to_schema="ISUP" to_table="ActionTask" type="Identifying" >
+				<fk_column name="pk" pk="tasks" />
+			</fk>
+		</table>
+		<table name="TaskCheckList" prior="Entity" >
+			<comment><![CDATA[Поручения]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="parent_Task" type="int" jt="4" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<column name="user" type="int" length="255" jt="4" />
+			<column name="status" prior="checked" type="int" jt="4" />
+			<column name="datestart" type="datetime" jt="93" />
+			<column name="timeneeded" type="bigint" jt="-5" />
+			<index name="Pk_TaskCheckList_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_TaskCheckList_CheckRunStatus" to_schema="ISUP" to_table="CheckRunStatus" type="Identifying" >
+				<fk_column name="status" pk="pk" />
+			</fk>
+			<fk name="Fk_TaskCheckList_Task" to_schema="ISUP" to_table="Task" type="Identifying" >
+				<fk_column name="parent_Task" pk="pk" />
+			</fk>
+			<fk name="Fk_TaskCheckList_Users" to_schema="ISUP" to_table="Users" type="Identifying" >
+				<fk_column name="user" pk="pk" />
+			</fk>
+		</table>
+		<table name="TaskStatus" prior="Task_" >
+			<comment><![CDATA[Статусы задач]]></comment>
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="100" jt="12" />
+			<index name="Pk_TaskStatus_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+		</table>
+		<table name="Users" prior="Entity" spec="" >
+			<column name="pk" type="int" jt="4" mandatory="y" />
+			<column name="login" type="varchar" length="255" jt="12" />
+			<column name="first_name" type="varchar" length="100" jt="12" />
+			<column name="second_name" type="varchar" length="100" jt="12" />
+			<column name="last_name" type="varchar" length="100" jt="12" />
+			<column name="otdel" type="int" jt="4" />
+			<column name="position" type="int" jt="4" />
+			<column name="innerphone" type="numeric" jt="2" unsigned="y" />
+			<column name="phone" prior="outerphone" type="numeric" jt="2" />
+			<column name="hardskills" type="int" jt="4" />
+			<column name="softskills" type="int" jt="4" />
+			<column name="email" type="varchar" length="255" jt="12" />
+			<column name="rank" type="int" jt="4" />
+			<column name="superuser" prior="project_office" type="boolean" jt="-7" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[суперпользователь - если в отдекле руководство или в проектном офисе =>true]]></comment>
+			</column>
+			<index name="Pk_Users_pk" unique="PRIMARY_KEY" >
+				<column name="pk" />
+			</index>
+			<fk name="Fk_Users_Otdel" to_schema="ISUP" to_table="Otdel" type="Identifying" >
+				<fk_column name="otdel" pk="pk" />
+			</fk>
+			<fk name="Fk_Users_Rank" to_schema="ISUP" to_table="Rank" type="Identifying" >
+				<fk_column name="rank" pk="pk" />
+			</fk>
+			<fk name="Fk_Users_Position" to_schema="ISUP" to_table="Position" type="Identifying" >
+				<fk_column name="position" pk="pk" />
+			</fk>
+			<fk name="Fk_Users_AssociationProj" to_schema="ISUP" to_table="AssociationProj" type="Identifying" >
+				<fk_column name="pk" pk="user_pk" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="SUP" id="Layout-144e" show_relation="columns" >
+		<comment><![CDATA[ISUP]]></comment>
+		<entity schema="ISUP" name="ActH" color="C1D8EE" x="512" y="64" />
+		<entity schema="ISUP" name="AssociationProj" color="EEC1EB" x="560" y="352" />
+		<entity schema="ISUP" name="Canban" color="C1EECB" x="880" y="992" />
+		<entity schema="ISUP" name="CanbanStage" color="C1EECB" x="880" y="816" />
+		<entity schema="ISUP" name="CheckRunStatus" color="3986C1" x="1536" y="496" />
+		<entity schema="ISUP" name="Doctype" color="C1D8EE" x="1200" y="112" />
+		<entity schema="ISUP" name="Documentation" color="C1D8EE" x="864" y="128" />
+		<entity schema="ISUP" name="EventCheckListChat" color="C13939" x="384" y="976" />
+		<entity schema="ISUP" name="EventFilesCheckListChat" color="C13939" x="384" y="800" />
+		<entity schema="ISUP" name="EventStatus" color="C13939" x="64" y="784" />
+		<entity schema="ISUP" name="Events" color="C13939" x="256" y="672" />
+		<entity schema="ISUP" name="EventsCheckList" color="C13939" x="48" y="928" />
+		<entity schema="ISUP" name="FilesCheckListChat" color="3986C1" x="1184" y="384" />
+		<entity schema="ISUP" name="Hardskill" color="BDC139" x="64" y="160" />
+		<entity schema="ISUP" name="HardskillGroup" color="BDC139" x="48" y="64" />
+		<entity schema="ISUP" name="History" color="C1D8EE" x="656" y="48" />
+		<entity schema="ISUP" name="Leave" color="BDC139" x="208" y="64" />
+		<entity schema="ISUP" name="Leavetype" color="BDC139" x="352" y="64" />
+		<entity schema="ISUP" name="Notes" color="4939C1" x="1184" y="800" />
+		<entity schema="ISUP" name="Noteschecklist" color="4939C1" x="1408" y="800" />
+		<entity schema="ISUP" name="Notesfiles" color="4939C1" x="1408" y="928" />
+		<entity schema="ISUP" name="Otdel" color="BDC139" x="64" y="320" />
+		<entity schema="ISUP" name="Position" color="BDC139" x="64" y="416" />
+		<entity schema="ISUP" name="Project" color="3986C1" x="720" y="240" />
+		<entity schema="ISUP" name="ProjectStatus" color="3986C1" x="512" y="208" />
+		<entity schema="ISUP" name="Rank" color="BDC139" x="160" y="480" />
+		<entity schema="ISUP" name="Softskill" color="BDC139" x="48" y="512" />
+		<entity schema="ISUP" name="SoftskillGroup" color="BDC139" x="48" y="624" />
+		<entity schema="ISUP" name="Stage" color="3986C1" x="1008" y="224" />
+		<entity schema="ISUP" name="TascCheckListChat" color="3986C1" x="1184" y="560" />
+		<entity schema="ISUP" name="Task" color="3986C1" x="976" y="336" />
+		<entity schema="ISUP" name="TaskCheckList" color="3986C1" x="1536" y="640" />
+		<entity schema="ISUP" name="TaskStatus" color="3986C1" x="1152" y="224" />
+		<entity schema="ISUP" name="Users" color="BDC139" x="352" y="288" />
+	</layout>
+</project>

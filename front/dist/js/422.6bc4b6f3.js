@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkfront"]=self["webpackChunkfront"]||[]).push([[422],{73422:function(n,t,e){e.r(t),e.d(t,{default:function(){return s}});var r=function(){var n=this,t=n.$createElement,e=n._self._c||t;return e("div",{staticStyle:{background:"gray"}})},u=[],l={name:"Main"},a=l,c=e(43736),f=(0,c.Z)(a,r,u,!1,null,null,null),s=f.exports}}]);
+//# sourceMappingURL=422.6bc4b6f3.js.map

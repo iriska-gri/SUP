@@ -1,0 +1,12 @@
+[{
+    "title":"Первая строка1",
+    "subtitle":"Вторая строка 1",
+    "description":"описание, которое нам бы хотелось тут 1",
+    "path":"/images/home/mainslider/brush.jpg",
+    "buttonleft": {"title":"Запись", "href":"/запись"},
+    "buttonright": {"title":"Контакты", "href":"/контакты"}
+
+}
+
+
+]

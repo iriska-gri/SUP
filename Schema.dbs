@@ -1,0 +1,1194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="ISUP" id="Project_165b" database="PostgreSQL" >
+	<schema name="public" >
+		<comment><![CDATA[standard public schema]]></comment>
+		<table name="alembic_version" >
+			<column name="version_num" type="varchar" length="32" decimal="0" jt="12" mandatory="y" />
+			<index name="alembic_version_pkc" unique="PRIMARY_KEY" >
+				<column name="version_num" />
+			</index>
+		</table>
+		<table name="assignmentchats" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('assignmentchats_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="message" type="text" decimal="0" jt="12" mandatory="y" />
+			<column name="sender" type="integer" length="10" decimal="0" jt="4" />
+			<column name="datetime" type="timestamp" length="0" decimal="6" jt="93" mandatory="y" />
+			<column name="assignment" type="integer" length="10" decimal="0" jt="4" />
+			<index name="assignmentchats_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_assignmentchats_assignments_id_assignment" to_schema="public" to_table="assignments" >
+				<fk_column name="assignment" pk="id" />
+			</fk>
+			<fk name="fk_assignmentchats_users_id_sender" to_schema="public" to_table="users" >
+				<fk_column name="sender" pk="id" />
+			</fk>
+		</table>
+		<table name="assignmentfiles" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('assignmentfiles_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="assignment" type="integer" length="10" decimal="0" jt="4" />
+			<column name="sender" type="integer" length="10" decimal="0" jt="4" />
+			<column name="datetime" type="timestamp" length="0" decimal="6" jt="93" mandatory="y" />
+			<column name="filepath" type="text" decimal="0" jt="12" mandatory="y" />
+			<index name="assignmentfiles_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_assignmentfiles_assignments_id_assignment" to_schema="public" to_table="assignments" >
+				<fk_column name="assignment" pk="id" />
+			</fk>
+			<fk name="fk_assignmentfiles_users_id_sender" to_schema="public" to_table="users" >
+				<fk_column name="sender" pk="id" />
+			</fk>
+		</table>
+		<table name="assignmentlooses" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('assignmentlooses_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="task" type="integer" length="10" decimal="0" jt="4" />
+			<column name="name" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="user" type="integer" length="10" decimal="0" jt="4" />
+			<column name="timeneeded" type="integer" length="10" decimal="0" jt="4" />
+			<index name="assignmentlooses_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_assignmentlooses_tasks_id_task" to_schema="public" to_table="tasks" >
+				<fk_column name="task" pk="id" />
+			</fk>
+			<fk name="fk_assignmentlooses_users_id_user" to_schema="public" to_table="users" >
+				<fk_column name="user" pk="id" />
+			</fk>
+		</table>
+		<table name="assignments" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('assignments_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="user" type="integer" length="10" decimal="0" jt="4" />
+			<column name="status" type="integer" length="10" decimal="0" jt="4" />
+			<column name="datetimestart" type="timestamp" length="0" decimal="6" jt="93" />
+			<column name="timeneeded" type="integer" length="10" decimal="0" jt="4" />
+			<column name="lastchanged" type="timestamp" length="0" decimal="6" jt="93" />
+			<column name="dateend" type="timestamp" length="0" decimal="6" jt="93" />
+			<column name="parent" type="integer" length="10" decimal="0" jt="4" />
+			<index name="assignments_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_assignments_assignmentstatuses_id_status" to_schema="public" to_table="assignmentstatuses" >
+				<fk_column name="status" pk="id" />
+			</fk>
+			<fk name="fk_assignments_users_id_user" to_schema="public" to_table="users" >
+				<fk_column name="user" pk="id" />
+			</fk>
+			<fk name="fk_assignments_works_id_parent" to_schema="public" to_table="works" >
+				<fk_column name="parent" pk="id" />
+			</fk>
+		</table>
+		<table name="assignmentstatuses" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('assignmentstatuses_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="assignmentstatuses_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="assignmentstatuses_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="canbans" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('canbans_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<column name="author" type="integer" length="10" decimal="0" jt="4" />
+			<index name="canbans_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_canbans_users_id_author" to_schema="public" to_table="users" >
+				<fk_column name="author" pk="id" />
+			</fk>
+		</table>
+		<table name="canbans_users" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('canbans_users_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="user" type="integer" length="10" decimal="0" jt="4" />
+			<column name="canban" type="integer" length="10" decimal="0" jt="4" />
+			<index name="canbans_users_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_canbans_users_canbans_canban_id" to_schema="public" to_table="canbans" delete_action="cascade" update_action="cascade" >
+				<fk_column name="canban" pk="id" />
+			</fk>
+			<fk name="fk_canbans_users_users_user_id" to_schema="public" to_table="users" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user" pk="id" />
+			</fk>
+		</table>
+		<table name="canbanstages" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('canbanstages_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="canban" type="integer" length="10" decimal="0" jt="4" />
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" />
+			<index name="canbanstages_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_canbanstages_canbans_id_canban" to_schema="public" to_table="canbans" >
+				<fk_column name="canban" pk="id" />
+			</fk>
+		</table>
+		<table name="canbanstages_notes" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('canbanstages_notes_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="note" type="integer" length="10" decimal="0" jt="4" />
+			<column name="canbanstage" type="integer" length="10" decimal="0" jt="4" />
+			<index name="canbanstages_notes_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_canbanstages_notes_canbanstages_canbanstage_id" to_schema="public" to_table="canbanstages" delete_action="cascade" update_action="cascade" >
+				<fk_column name="canbanstage" pk="id" />
+			</fk>
+			<fk name="fk_canbanstages_notes_notes_note_id" to_schema="public" to_table="notes" delete_action="cascade" update_action="cascade" >
+				<fk_column name="note" pk="id" />
+			</fk>
+		</table>
+		<table name="canbanstages_tasks" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('canbanstages_tasks_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="task" type="integer" length="10" decimal="0" jt="4" />
+			<column name="canbanstage" type="integer" length="10" decimal="0" jt="4" />
+			<index name="canbanstages_tasks_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_canbanstages_tasks_canbanstages_canbanstage_id" to_schema="public" to_table="canbanstages" delete_action="cascade" update_action="cascade" >
+				<fk_column name="canbanstage" pk="id" />
+			</fk>
+			<fk name="fk_canbanstages_tasks_tasks_task_id" to_schema="public" to_table="tasks" delete_action="cascade" update_action="cascade" >
+				<fk_column name="task" pk="id" />
+			</fk>
+		</table>
+		<table name="departments" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('departments_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<column name="postal_code" type="varchar" length="100" decimal="0" jt="12" />
+			<column name="city" type="varchar" length="200" decimal="0" jt="12" />
+			<column name="region" type="varchar" length="200" decimal="0" jt="12" />
+			<column name="street" type="varchar" length="200" decimal="0" jt="12" />
+			<column name="organization" type="integer" length="10" decimal="0" jt="4" />
+			<index name="departments_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="departments_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+			<fk name="fk_departments_organizations_id_organization" to_schema="public" to_table="organizations" >
+				<fk_column name="organization" pk="id" />
+			</fk>
+		</table>
+		<table name="doctypes" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('doctypes_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="doctypes_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="doctypes_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="documentations" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('documentations_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="project" type="integer" length="10" decimal="0" jt="4" />
+			<column name="doctype" type="integer" length="10" decimal="0" jt="4" />
+			<column name="created" type="timestamp" length="0" decimal="6" jt="93" mandatory="y" />
+			<column name="accepted" type="timestamp" length="0" decimal="6" jt="93" mandatory="y" />
+			<index name="documentations_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_documentations_doctypes_id_doctype" to_schema="public" to_table="doctypes" >
+				<fk_column name="doctype" pk="id" />
+			</fk>
+			<fk name="fk_documentations_projects_id_project" to_schema="public" to_table="projects" >
+				<fk_column name="project" pk="id" />
+			</fk>
+		</table>
+		<table name="eventchats" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('eventchats_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="chlist" type="integer" length="10" decimal="0" jt="4" />
+			<column name="message" type="text" decimal="0" jt="12" mandatory="y" />
+			<column name="sender" type="integer" length="10" decimal="0" jt="4" />
+			<column name="datetime" type="timestamp" length="0" decimal="6" jt="93" mandatory="y" />
+			<index name="eventchats_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_eventchats_eventchecklists_id_chlist" to_schema="public" to_table="eventchecklists" >
+				<fk_column name="chlist" pk="id" />
+			</fk>
+			<fk name="fk_eventchats_users_id_sender" to_schema="public" to_table="users" >
+				<fk_column name="sender" pk="id" />
+			</fk>
+		</table>
+		<table name="eventchecklists" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('eventchecklists_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="event" type="integer" length="10" decimal="0" jt="4" />
+			<column name="name" type="varchar" length="500" decimal="0" jt="12" mandatory="y" />
+			<column name="user" type="integer" length="10" decimal="0" jt="4" />
+			<column name="checked" type="boolean" length="1" decimal="0" jt="-7" />
+			<column name="datestart" type="timestamp" length="0" decimal="6" jt="93" mandatory="y" />
+			<column name="timeneeded" type="integer" length="10" decimal="0" jt="4" mandatory="y" />
+			<index name="eventchecklists_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_eventchecklists_events_id_event" to_schema="public" to_table="events" >
+				<fk_column name="event" pk="id" />
+			</fk>
+			<fk name="fk_eventchecklists_users_id_user" to_schema="public" to_table="users" >
+				<fk_column name="user" pk="id" />
+			</fk>
+		</table>
+		<table name="eventfiles" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('eventfiles_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="chlist" type="integer" length="10" decimal="0" jt="4" />
+			<column name="sender" type="integer" length="10" decimal="0" jt="4" />
+			<column name="datetime" type="timestamp" length="0" decimal="6" jt="93" mandatory="y" />
+			<column name="filepath" type="text" decimal="0" jt="12" mandatory="y" />
+			<index name="eventfiles_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_eventfiles_eventchecklists_id_chlist" to_schema="public" to_table="eventchecklists" >
+				<fk_column name="chlist" pk="id" />
+			</fk>
+			<fk name="fk_eventfiles_users_id_sender" to_schema="public" to_table="users" >
+				<fk_column name="sender" pk="id" />
+			</fk>
+		</table>
+		<table name="eventhistories" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('eventhistories_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="text" type="text" decimal="0" jt="12" mandatory="y" />
+			<column name="level" type="integer" length="10" decimal="0" jt="4" />
+			<column name="event" type="integer" length="10" decimal="0" jt="4" />
+			<column name="action" type="integer" length="10" decimal="0" jt="4" />
+			<column name="createdate" type="timestamp" length="0" decimal="6" jt="93" />
+			<index name="eventhistories_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_eventhistories_events_id_event" to_schema="public" to_table="events" >
+				<fk_column name="event" pk="id" />
+			</fk>
+			<fk name="fk_eventhistories_historyactions_id_action" to_schema="public" to_table="historyactions" >
+				<fk_column name="action" pk="id" />
+			</fk>
+			<fk name="fk_eventhistories_historylevels_id_level" to_schema="public" to_table="historylevels" >
+				<fk_column name="level" pk="id" />
+			</fk>
+		</table>
+		<table name="events" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('events_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="1000" decimal="0" jt="12" mandatory="y" />
+			<column name="status" type="integer" length="10" decimal="0" jt="4" />
+			<column name="description" type="text" decimal="0" jt="12" mandatory="y" />
+			<column name="dateandtime" type="timestamp" length="0" decimal="6" jt="93" mandatory="y" />
+			<column name="place" type="varchar" length="1000" decimal="0" jt="12" mandatory="y" />
+			<column name="leader" type="integer" length="10" decimal="0" jt="4" />
+			<index name="events_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_events_eventstatuses_id_status" to_schema="public" to_table="eventstatuses" >
+				<fk_column name="status" pk="id" />
+			</fk>
+			<fk name="fk_events_users_id_leader" to_schema="public" to_table="users" >
+				<fk_column name="leader" pk="id" />
+			</fk>
+		</table>
+		<table name="events_users" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('events_users_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="user" type="integer" length="10" decimal="0" jt="4" />
+			<column name="event" type="integer" length="10" decimal="0" jt="4" />
+			<index name="events_users_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_events_users_events_event_id" to_schema="public" to_table="events" delete_action="cascade" update_action="cascade" >
+				<fk_column name="event" pk="id" />
+			</fk>
+			<fk name="fk_events_users_users_user_id" to_schema="public" to_table="users" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user" pk="id" />
+			</fk>
+		</table>
+		<table name="eventstatuses" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('eventstatuses_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="eventstatuses_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="eventstatuses_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="grouphardskills" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('grouphardskills_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="500" decimal="0" jt="12" mandatory="y" />
+			<index name="grouphardskills_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="grouphardskills_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="groupsoftskills" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('groupsoftskills_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="500" decimal="0" jt="12" mandatory="y" />
+			<index name="groupsoftskills_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="groupsoftskills_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="hardskills" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('hardskills_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="200" decimal="0" jt="12" mandatory="y" />
+			<column name="group" type="integer" length="10" decimal="0" jt="4" />
+			<index name="hardskills_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="hardskills_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+			<fk name="fk_hardskills_grouphardskills_id_group" to_schema="public" to_table="grouphardskills" >
+				<fk_column name="group" pk="id" />
+			</fk>
+		</table>
+		<table name="historyactions" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('historyactions_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="historyactions_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="historyactions_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="historylevels" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('historylevels_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="historylevels_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="historylevels_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="leaves" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('leaves_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="user" type="integer" length="10" decimal="0" jt="4" />
+			<column name="datestart" type="date" length="13" decimal="0" jt="91" mandatory="y" />
+			<column name="dateend" type="date" length="13" decimal="0" jt="91" mandatory="y" />
+			<column name="leavetype" type="integer" length="10" decimal="0" jt="4" />
+			<index name="leaves_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_leaves_leavetypes_id_leavetype" to_schema="public" to_table="leavetypes" >
+				<fk_column name="leavetype" pk="id" />
+			</fk>
+			<fk name="fk_leaves_users_id_user" to_schema="public" to_table="users" >
+				<fk_column name="user" pk="id" />
+			</fk>
+		</table>
+		<table name="leavetypes" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('leavetypes_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="500" decimal="0" jt="12" mandatory="y" />
+			<index name="leavetypes_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="leavetypes_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="notechecklists" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('notechecklists_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="note" type="integer" length="10" decimal="0" jt="4" />
+			<column name="name" type="varchar" length="300" decimal="0" jt="12" mandatory="y" />
+			<column name="checked" type="boolean" length="1" decimal="0" jt="-7" />
+			<index name="notechecklists_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_notechecklists_notes_id_note" to_schema="public" to_table="notes" >
+				<fk_column name="note" pk="id" />
+			</fk>
+		</table>
+		<table name="notefiles" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('notefiles_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="note" type="integer" length="10" decimal="0" jt="4" />
+			<column name="filepath" type="varchar" length="1000" decimal="0" jt="12" mandatory="y" />
+			<column name="sender" type="integer" length="10" decimal="0" jt="4" />
+			<column name="datetime" type="timestamp" length="0" decimal="6" jt="93" mandatory="y" />
+			<index name="notefiles_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_notefiles_notes_id_note" to_schema="public" to_table="notes" >
+				<fk_column name="note" pk="id" />
+			</fk>
+			<fk name="fk_notefiles_users_id_sender" to_schema="public" to_table="users" >
+				<fk_column name="sender" pk="id" />
+			</fk>
+		</table>
+		<table name="notes" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('notes_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="message" type="text" decimal="0" jt="12" mandatory="y" />
+			<column name="user" type="integer" length="10" decimal="0" jt="4" />
+			<column name="datetime" type="timestamp" length="0" decimal="6" jt="93" mandatory="y" />
+			<column name="note" type="boolean" length="1" decimal="0" jt="-7" mandatory="y" />
+			<index name="notes_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_notes_users_id_user" to_schema="public" to_table="users" >
+				<fk_column name="user" pk="id" />
+			</fk>
+		</table>
+		<table name="notes_users" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('notes_users_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="user" type="integer" length="10" decimal="0" jt="4" />
+			<column name="note" type="integer" length="10" decimal="0" jt="4" />
+			<index name="notes_users_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_notes_users_notes_note_id" to_schema="public" to_table="notes" delete_action="cascade" update_action="cascade" >
+				<fk_column name="note" pk="id" />
+			</fk>
+			<fk name="fk_notes_users_users_user_id" to_schema="public" to_table="users" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user" pk="id" />
+			</fk>
+		</table>
+		<table name="organizations" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('organizations_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="500" decimal="0" jt="12" mandatory="y" />
+			<index name="organizations_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="organizations_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="otdels" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('otdels_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<column name="shortname" type="varchar" length="7" decimal="0" jt="12" />
+			<column name="department" type="integer" length="10" decimal="0" jt="4" />
+			<index name="otdels_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="otdels_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+			<fk name="fk_otdels_departments_id_department" to_schema="public" to_table="departments" >
+				<fk_column name="department" pk="id" />
+			</fk>
+		</table>
+		<table name="positions" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('positions_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="positions_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="positions_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="projecthistories" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('projecthistories_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="text" type="text" decimal="0" jt="12" mandatory="y" />
+			<column name="level" type="integer" length="10" decimal="0" jt="4" />
+			<column name="project" type="integer" length="10" decimal="0" jt="4" />
+			<column name="action" type="integer" length="10" decimal="0" jt="4" />
+			<column name="createdate" type="timestamp" length="0" decimal="6" jt="93" />
+			<index name="projecthistories_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_projecthistories_historyactions_id_action" to_schema="public" to_table="historyactions" >
+				<fk_column name="action" pk="id" />
+			</fk>
+			<fk name="fk_projecthistories_historylevels_id_level" to_schema="public" to_table="historylevels" >
+				<fk_column name="level" pk="id" />
+			</fk>
+			<fk name="fk_projecthistories_projects_id_project" to_schema="public" to_table="projects" >
+				<fk_column name="project" pk="id" />
+			</fk>
+		</table>
+		<table name="projects" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('projects_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="status" type="integer" length="10" decimal="0" jt="4" />
+			<column name="customer" type="varchar" length="250" decimal="0" jt="12" />
+			<column name="author" type="integer" length="10" decimal="0" jt="4" />
+			<column name="datestart" type="date" length="13" decimal="0" jt="91" />
+			<column name="dateend" type="date" length="13" decimal="0" jt="91" />
+			<column name="lastchanged" type="timestamp" length="0" decimal="6" jt="93" />
+			<column name="director" type="integer" length="10" decimal="0" jt="4" />
+			<column name="rp" type="integer" length="10" decimal="0" jt="4" />
+			<column name="coordinator" type="integer" length="10" decimal="0" jt="4" />
+			<column name="secretary" type="integer" length="10" decimal="0" jt="4" />
+			<column name="ptype" type="integer" length="10" decimal="0" jt="4" />
+			<index name="projects_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_projects_projectstatuses_id_status" to_schema="public" to_table="projectstatuses" >
+				<fk_column name="status" pk="id" />
+			</fk>
+			<fk name="fk_projects_projecttypes_id_ptype" to_schema="public" to_table="projecttypes" >
+				<fk_column name="ptype" pk="id" />
+			</fk>
+			<fk name="fk_projects_users_id_author" to_schema="public" to_table="users" >
+				<fk_column name="author" pk="id" />
+			</fk>
+			<fk name="fk_projects_users_id_coordinator" to_schema="public" to_table="users" >
+				<fk_column name="coordinator" pk="id" />
+			</fk>
+			<fk name="fk_projects_users_id_director" to_schema="public" to_table="users" >
+				<fk_column name="director" pk="id" />
+			</fk>
+			<fk name="fk_projects_users_id_rp" to_schema="public" to_table="users" >
+				<fk_column name="rp" pk="id" />
+			</fk>
+			<fk name="fk_projects_users_id_secretary" to_schema="public" to_table="users" >
+				<fk_column name="secretary" pk="id" />
+			</fk>
+		</table>
+		<table name="projectstatuses" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('projectstatuses_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="projectstatuses_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="projectstatuses_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="projecttypes" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('projecttypes_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="projecttypes_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="projecttypes_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="projectusers" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('projectusers_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="involved" type="boolean" length="1" decimal="0" jt="-7" />
+			<column name="user" type="integer" length="10" decimal="0" jt="4" />
+			<column name="project" type="integer" length="10" decimal="0" jt="4" />
+			<index name="projectusers_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_projectusers_projects_project_id" to_schema="public" to_table="projects" delete_action="cascade" update_action="cascade" >
+				<fk_column name="project" pk="id" />
+			</fk>
+			<fk name="fk_projectusers_users_user_id" to_schema="public" to_table="users" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user" pk="id" />
+			</fk>
+		</table>
+		<table name="ranks" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('ranks_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="ranks_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="ranks_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="softskills" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('softskills_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="200" decimal="0" jt="12" mandatory="y" />
+			<column name="group" type="integer" length="10" decimal="0" jt="4" />
+			<index name="softskills_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="softskills_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+			<fk name="fk_softskills_groupsoftskills_id_group" to_schema="public" to_table="groupsoftskills" >
+				<fk_column name="group" pk="id" />
+			</fk>
+		</table>
+		<table name="tasks" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('tasks_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="500" decimal="0" jt="12" mandatory="y" />
+			<column name="status" type="integer" length="10" decimal="0" jt="4" />
+			<column name="datestart" type="date" length="13" decimal="0" jt="91" />
+			<column name="dateend" type="date" length="13" decimal="0" jt="91" />
+			<column name="responsible" type="integer" length="10" decimal="0" jt="4" />
+			<column name="lastchanged" type="timestamp" length="0" decimal="6" jt="93" />
+			<column name="parent" type="integer" length="10" decimal="0" jt="4" />
+			<index name="tasks_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_tasks_projects_id_parent" to_schema="public" to_table="projects" >
+				<fk_column name="parent" pk="id" />
+			</fk>
+			<fk name="fk_tasks_taskstatuses_id_status" to_schema="public" to_table="taskstatuses" >
+				<fk_column name="status" pk="id" />
+			</fk>
+			<fk name="fk_tasks_users_id_responsible" to_schema="public" to_table="users" >
+				<fk_column name="responsible" pk="id" />
+			</fk>
+		</table>
+		<table name="taskstages" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('taskstages_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="500" decimal="0" jt="12" mandatory="y" />
+			<index name="taskstages_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="taskstages_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="taskstatuses" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('taskstatuses_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="taskstatuses_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="taskstatuses_name_key" unique="UNIQUE_KEY" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="userhardskills" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('userhardskills_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="level" type="integer" length="10" decimal="0" jt="4" />
+			<column name="hardskill" type="integer" length="10" decimal="0" jt="4" />
+			<column name="user" type="integer" length="10" decimal="0" jt="4" />
+			<index name="userhardskills_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_userhardskills_hardskills_hardskill_id" to_schema="public" to_table="hardskills" delete_action="cascade" update_action="cascade" >
+				<fk_column name="hardskill" pk="id" />
+			</fk>
+			<fk name="fk_userhardskills_users_user_id" to_schema="public" to_table="users" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user" pk="id" />
+			</fk>
+		</table>
+		<table name="userhistorys" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('userhistorys_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="user" type="integer" length="10" decimal="0" jt="4" />
+			<column name="who_did_it" type="integer" length="10" decimal="0" jt="4" />
+			<column name="datetimeact" type="timestamp" length="0" decimal="6" jt="93" />
+			<column name="type_action" type="boolean" length="1" decimal="0" jt="-7" />
+			<index name="userhistorys_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_userhistorys_users_id_user" to_schema="public" to_table="users" >
+				<fk_column name="user" pk="id" />
+			</fk>
+			<fk name="fk_userhistorys_users_id_who_did_it" to_schema="public" to_table="users" >
+				<fk_column name="who_did_it" pk="id" />
+			</fk>
+		</table>
+		<table name="users" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('users_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="phone" type="varchar" length="50" decimal="0" jt="12" />
+			<column name="email" type="varchar" length="150" decimal="0" jt="12" />
+			<column name="otdel" type="integer" length="10" decimal="0" jt="4" />
+			<column name="position" type="integer" length="10" decimal="0" jt="4" />
+			<column name="rank" type="integer" length="10" decimal="0" jt="4" />
+			<column name="superuser" type="boolean" length="1" decimal="0" jt="-7" />
+			<column name="department" type="integer" length="10" decimal="0" jt="4" />
+			<column name="active" type="boolean" length="1" decimal="0" jt="-7" />
+			<column name="physicalDeliveryOfficeName" type="varchar" length="100" decimal="0" jt="12" />
+			<column name="givenName" type="varchar" length="250" decimal="0" jt="12" />
+			<column name="sn" type="varchar" length="100" decimal="0" jt="12" />
+			<column name="telephoneNumber" type="varchar" length="50" decimal="0" jt="12" />
+			<column name="organization" type="integer" length="10" decimal="0" jt="4" />
+			<column name="username" type="varchar" length="250" decimal="0" jt="12" />
+			<index name="users_email_key" unique="UNIQUE_KEY" >
+				<column name="email" />
+			</index>
+			<index name="users_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="users_username_key" unique="UNIQUE_KEY" >
+				<column name="username" />
+			</index>
+			<fk name="fk_users_departments_id_department" to_schema="public" to_table="departments" >
+				<fk_column name="department" pk="id" />
+			</fk>
+			<fk name="fk_users_organizations_id_organization" to_schema="public" to_table="organizations" >
+				<fk_column name="organization" pk="id" />
+			</fk>
+			<fk name="fk_users_otdels_id_otdel" to_schema="public" to_table="otdels" >
+				<fk_column name="otdel" pk="id" />
+			</fk>
+			<fk name="fk_users_positions_id_position" to_schema="public" to_table="positions" >
+				<fk_column name="position" pk="id" />
+			</fk>
+			<fk name="fk_users_ranks_id_rank" to_schema="public" to_table="ranks" >
+				<fk_column name="rank" pk="id" />
+			</fk>
+		</table>
+		<table name="usersoftskills" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('usersoftskills_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="level" type="integer" length="10" decimal="0" jt="4" />
+			<column name="softskill" type="integer" length="10" decimal="0" jt="4" />
+			<column name="user" type="integer" length="10" decimal="0" jt="4" />
+			<index name="usersoftskills_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_usersoftskills_softskills_softskill_id" to_schema="public" to_table="softskills" delete_action="cascade" update_action="cascade" >
+				<fk_column name="softskill" pk="id" />
+			</fk>
+			<fk name="fk_usersoftskills_users_user_id" to_schema="public" to_table="users" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user" pk="id" />
+			</fk>
+		</table>
+		<table name="works" >
+			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo><![CDATA[nextval('works_id_seq'::regclass)]]></defo>
+			</column>
+			<column name="parent" type="integer" length="10" decimal="0" jt="4" />
+			<column name="name" type="varchar" length="500" decimal="0" jt="12" mandatory="y" />
+			<column name="status" type="integer" length="10" decimal="0" jt="4" />
+			<column name="description" type="text" decimal="0" jt="12" />
+			<column name="datestart" type="date" length="13" decimal="0" jt="91" />
+			<column name="dateend" type="date" length="13" decimal="0" jt="91" />
+			<index name="works_pkey" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_works_tasks_id_parent" to_schema="public" to_table="tasks" >
+				<fk_column name="parent" pk="id" />
+			</fk>
+			<fk name="fk_works_taskstatuses_id_status" to_schema="public" to_table="taskstatuses" >
+				<fk_column name="status" pk="id" />
+			</fk>
+		</table>
+		<sequence name="assignmentchats_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="assignmentfiles_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="assignmentlooses_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="assignments_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="assignmentstatuses_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="canbans_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="canbans_users_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="canbanstages_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="canbanstages_notes_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="canbanstages_tasks_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="departments_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="doctypes_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="documentations_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="eventchats_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="eventchecklists_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="eventfiles_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="eventhistories_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="events_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="events_users_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="eventstatuses_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="grouphardskills_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="groupsoftskills_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="hardskills_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="historyactions_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="historylevels_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="leaves_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="leavetypes_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="notechecklists_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="notefiles_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="notes_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="notes_users_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="organizations_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="otdels_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="positions_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="projecthistories_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="projects_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="projectstatuses_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="projecttypes_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="projectusers_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="ranks_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="softskills_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="tasks_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="taskstages_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="taskstatuses_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="userhardskills_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="userhistorys_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="users_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="usersoftskills_id_seq" options="START WITH 1 INCREMENT BY 1" />
+		<sequence name="works_id_seq" options="START WITH 1 INCREMENT BY 1" />
+	</schema>
+	<connector name="ISUP" database="PostgreSQL" driver_class="org.postgresql.Driver" driver_jar="postgresql-42.2.23.jar" driver_desc="Standard" host="localhost" port="5432" instance="dbsup" user="pgsup" passwd="ZWNkYTdmNWVjM2VlYzFhZjVjM2YyZWM4ZGFiNjAyNzQ3MmNhN2Y1ZjRjZmFmYTg3MjA=" />
+	<layout name="Layout with Tools" id="Layout_1181" show_column_type="y" show_relation="columns" >
+		<comment><![CDATA[ISUP]]></comment>
+		<entity schema="public" name="alembic_version" color="3986C1" x="1648" y="1328" />
+		<entity schema="public" name="assignmentchats" color="BEBEF4" x="3312" y="1328" />
+		<entity schema="public" name="assignmentfiles" color="BEBEF4" x="3312" y="1616" />
+		<entity schema="public" name="assignmentlooses" color="BED3F4" x="2208" y="1600" />
+		<entity schema="public" name="assignments" color="BEBEF4" x="3008" y="1328" />
+		<entity schema="public" name="assignmentstatuses" color="BEBEF4" x="3008" y="1616" />
+		<entity schema="public" name="canbans" color="BED3F4" x="1952" y="1872" />
+		<entity schema="public" name="canbans_users" color="BED3F4" x="2192" y="2064" />
+		<entity schema="public" name="canbanstages" color="BED3F4" x="2192" y="1872" />
+		<entity schema="public" name="canbanstages_notes" color="BED3F4" x="2432" y="1872" />
+		<entity schema="public" name="canbanstages_tasks" color="BED3F4" x="1952" y="1600" />
+		<entity schema="public" name="departments" color="D1BEF4" x="48" y="816" />
+		<entity schema="public" name="doctypes" color="C7F4BE" x="2752" y="816" />
+		<entity schema="public" name="documentations" color="C7F4BE" x="2480" y="816" />
+		<entity schema="public" name="eventchats" color="F4DDBE" x="1648" y="464" />
+		<entity schema="public" name="eventchecklists" color="F4DDBE" x="1344" y="464" />
+		<entity schema="public" name="eventfiles" color="F4DDBE" x="1648" y="752" />
+		<entity schema="public" name="eventhistories" color="C7F4BE" x="912" y="1328" />
+		<entity schema="public" name="events" color="C7F4BE" x="624" y="1328" />
+		<entity schema="public" name="events_users" color="C7F4BE" x="912" y="1584" />
+		<entity schema="public" name="eventstatuses" color="C7F4BE" x="624" y="1584" />
+		<entity schema="public" name="grouphardskills" color="F4DDBE" x="1616" y="1104" />
+		<entity schema="public" name="groupsoftskills" color="BED3F4" x="128" y="240" />
+		<entity schema="public" name="hardskills" color="F4DDBE" x="1344" y="880" />
+		<entity schema="public" name="historyactions" color="C7F4BE" x="2768" y="464" />
+		<entity schema="public" name="historylevels" color="C7F4BE" x="1200" y="1328" />
+		<entity schema="public" name="leaves" color="F4DDBE" x="112" y="464" />
+		<entity schema="public" name="leavetypes" color="F4DDBE" x="352" y="464" />
+		<entity schema="public" name="notechecklists" color="BEBEF4" x="48" y="1552" />
+		<entity schema="public" name="notefiles" color="BEBEF4" x="320" y="1552" />
+		<entity schema="public" name="notes" color="BEBEF4" x="48" y="1328" />
+		<entity schema="public" name="notes_users" color="BEBEF4" x="320" y="1328" />
+		<entity schema="public" name="organizations" color="D1BEF4" x="336" y="816" />
+		<entity schema="public" name="otdels" color="D1BEF4" x="336" y="1072" />
+		<entity schema="public" name="positions" color="F4DDBE" x="672" y="672" />
+		<entity schema="public" name="projecthistories" color="C7F4BE" x="2480" y="464" />
+		<entity schema="public" name="projects" color="C7F4BE" x="2192" y="464" />
+		<entity schema="public" name="projectstatuses" color="C7F4BE" x="1952" y="640" />
+		<entity schema="public" name="projecttypes" color="C7F4BE" x="1952" y="816" />
+		<entity schema="public" name="projectusers" color="C7F4BE" x="2192" y="816" />
+		<entity schema="public" name="ranks" color="D1BEF4" x="1952" y="1104" />
+		<entity schema="public" name="softskills" color="BED3F4" x="128" y="48" />
+		<entity schema="public" name="tasks" color="BED3F4" x="2208" y="1328" />
+		<entity schema="public" name="taskstages" color="BED3F4" x="2736" y="1600" />
+		<entity schema="public" name="taskstatuses" color="BED3F4" x="2496" y="1600" />
+		<entity schema="public" name="userhardskills" color="F4DDBE" x="944" y="880" />
+		<entity schema="public" name="userhistorys" color="F4DDBE" x="624" y="880" />
+		<entity schema="public" name="users" color="F4DDBE" x="944" y="464" />
+		<entity schema="public" name="usersoftskills" color="BED3F4" x="368" y="48" />
+		<entity schema="public" name="works" color="BED3F4" x="2496" y="1328" />
+		<script name="Sample SQL Editor" id="Editor_2575" language="SQL" >
+			<string><![CDATA[SELECT id, phone, email, otdel, "position", rank, superuser, department, active, "physicalDeliveryOfficeName", "givenName", 
+	sn, "telephoneNumber", organization, username
+FROM
+	"public".users s;]]></string>
+		</script>
+		<browser id="Browse_733" name="Sample Relational Data Explorer" confirm_updates="y" >
+			<browse_table schema="public" entity="users" x="20" y="20" width="400" height="300" >
+				<browse_table schema="public" entity="assignmentchats" fk="fk_assignmentchats_users_id_sender" x="440" y="20" width="500" height="350" >
+					<browse_table schema="public" entity="assignments" fk="fk_assignmentchats_assignments_id_assignment" x="960" y="20" width="500" height="350" record_view="y" />
+				</browse_table>
+			</browse_table>
+		</browser>
+		<query id="Query_269c" name="Sample Query Builder" >
+			<query_table schema="public" name="users" alias="u" x="48" y="48" >
+				<column name="id" />
+				<column name="phone" />
+				<column name="email" />
+				<column name="otdel" />
+				<column name="position" />
+				<column name="rank" />
+				<column name="superuser" />
+				<column name="department" />
+				<column name="active" />
+				<column name="physicalDeliveryOfficeName" />
+				<column name="givenName" />
+				<column name="sn" />
+				<column name="telephoneNumber" />
+				<column name="organization" />
+				<column name="username" />
+				<query_table schema="public" name="assignmentchats" alias="a" x="320" y="48" fk="fk_assignmentchats_users_id_sender" type="Inner Join" >
+					<column name="id" />
+					<column name="message" />
+					<column name="sender" />
+					<column name="datetime" />
+					<column name="assignment" />
+					<query_table schema="public" name="assignments" alias="a1" x="512" y="48" fk="fk_assignmentchats_assignments_id_assignment" type="Inner Join" >
+						<column name="id" />
+						<column name="name" />
+						<column name="user" />
+						<column name="status" />
+						<column name="datetimestart" />
+						<column name="timeneeded" />
+						<column name="lastchanged" />
+						<column name="dateend" />
+						<column name="parent" />
+					</query_table>
+				</query_table>
+			</query_table>
+		</query>
+		<form name="Sample Report" id="Report_c94" template="Page" css="container-fluid" view="frame" >
+			<var name="samplePageNumber" type="4" value="0" mandatory="n" />
+			<var name="sampleRecordsPerPage" type="4" value="100" mandatory="n" />
+			<body name="Body" template="Grid" pos="0,0,0,0,f,f" layout="{{-2,-2,-2,-2,-1},{-2,-2,-2}}" scroll="n" html="n" >
+				<cell type="label" name="sample" template="H3" pos="0,0,1,0,l,c" />
+				<tableview name="sample" template="Table" css="table table-striped table-bordered table-sm table-hover" pos="0,1,4,1,f,f" layout="{{-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2},{-2,-2}}" scroll="n" html="n" header_rows="1" >
+					<form_script type="DataSource" language="SQL" >
+						<var name="id" type="4" />
+						<var name="phone" />
+						<var name="email" />
+						<var name="otdel" type="4" />
+						<var name="position" type="4" />
+						<var name="rank" type="4" />
+						<var name="superuser" type="-7" />
+						<var name="department" type="4" />
+						<var name="active" type="-7" />
+						<var name="physicalDeliveryOfficeName" />
+						<var name="givenName" />
+						<var name="sn" />
+						<var name="telephoneNumber" />
+						<var name="organization" type="4" />
+						<var name="username" />
+						<script ><![CDATA[SELECT * FROM "public".users]]></script>
+					</form_script>
+					<cell type="label" name="id" pos="0,0,0,0,c,c" />
+					<cell type="label" name="phone" pos="1,0,1,0,c,c" />
+					<cell type="label" name="email" pos="2,0,2,0,c,c" />
+					<cell type="label" name="otdel" pos="3,0,3,0,c,c" />
+					<cell type="label" name="position" pos="4,0,4,0,c,c" />
+					<cell type="label" name="rank" pos="5,0,5,0,c,c" />
+					<cell type="label" name="superuser" pos="6,0,6,0,c,c" />
+					<cell type="label" name="department" pos="7,0,7,0,c,c" />
+					<cell type="label" name="active" pos="8,0,8,0,c,c" />
+					<cell type="label" name="physicalDeliveryOfficeName" pos="9,0,9,0,c,c" />
+					<cell type="label" name="givenName" pos="10,0,10,0,c,c" />
+					<cell type="label" name="sn" pos="11,0,11,0,c,c" />
+					<cell type="label" name="telephoneNumber" pos="12,0,12,0,c,c" />
+					<cell type="label" name="organization" pos="13,0,13,0,c,c" />
+					<cell type="label" name="username" pos="14,0,14,0,c,c" />
+					<cell type="label" name="${id}" template="Plain" pos="0,1,0,1,l,c" />
+					<cell type="label" name="${phone}" template="Plain" pos="1,1,1,1,l,c" />
+					<cell type="label" name="${email}" template="Plain" pos="2,1,2,1,l,c" />
+					<cell type="label" name="${otdel}" template="Plain" pos="3,1,3,1,l,c" />
+					<cell type="label" name="${position}" template="Plain" pos="4,1,4,1,l,c" />
+					<cell type="label" name="${rank}" template="Plain" pos="5,1,5,1,l,c" />
+					<cell type="label" name="${superuser}" template="Plain" pos="6,1,6,1,l,c" />
+					<cell type="label" name="${department}" template="Plain" pos="7,1,7,1,l,c" />
+					<cell type="label" name="${active}" template="Plain" pos="8,1,8,1,l,c" />
+					<cell type="label" name="${physicalDeliveryOfficeName}" template="Plain" pos="9,1,9,1,l,c" />
+					<cell type="label" name="${givenName}" template="Plain" pos="10,1,10,1,l,c" />
+					<cell type="label" name="${sn}" template="Plain" pos="11,1,11,1,l,c" />
+					<cell type="label" name="${telephoneNumber}" template="Plain" pos="12,1,12,1,l,c" />
+					<cell type="label" name="${organization}" template="Plain" pos="13,1,13,1,l,c" />
+					<cell type="label" name="${username}" template="Plain" pos="14,1,14,1,l,c" />
+				</tableview>
+				<cell type="href" name="" disabled="${samplePageNumber&lt;1}" pos="0,2,0,2,l,c" glyph="FA-ANGLE_DOUBLE_LEFT" ref_id="Report_c94" >
+					<var name="samplePageNumber" value="0" />
+				</cell>
+				<cell type="href" name="" disabled="${samplePageNumber&lt;1}" pos="1,2,1,2,l,c" glyph="FA-ANGLE_LEFT" ref_id="Report_c94" >
+					<var name="samplePageNumber" value="${Math.max(0,samplePageNumber-1)}" />
+				</cell>
+				<cell type="label" name="Page ${samplePageNumber+1}" pos="2,2,2,2,l,c" />
+				<cell type="href" name="" disabled="${!sampleHasNextPage}" pos="3,2,3,2,l,c" glyph="FA-ANGLE_RIGHT" ref_id="Report_c94" >
+					<var name="samplePageNumber" value="${( samplePageNumber+1 )}" />
+				</cell>
+			</body>
+		</form>
+	</layout>
+	<layout name="Main Layout" id="Layout_1ffa" show_relation="columns" >
+		<entity schema="public" name="alembic_version" color="3986C1" x="256" y="496" />
+		<entity schema="public" name="assignmentchats" color="BEBEF4" x="2592" y="1360" />
+		<entity schema="public" name="assignmentfiles" color="BEBEF4" x="2592" y="1648" />
+		<entity schema="public" name="assignmentlooses" color="BED3F4" x="1744" y="1632" />
+		<entity schema="public" name="assignments" color="BEBEF4" x="2368" y="1360" />
+		<entity schema="public" name="assignmentstatuses" color="BEBEF4" x="2368" y="1648" />
+		<entity schema="public" name="canbans" color="BED3F4" x="1536" y="1904" />
+		<entity schema="public" name="canbans_users" color="BED3F4" x="1712" y="2096" />
+		<entity schema="public" name="canbanstages" color="BED3F4" x="1712" y="1904" />
+		<entity schema="public" name="canbanstages_notes" color="BED3F4" x="1904" y="1904" />
+		<entity schema="public" name="canbanstages_tasks" color="BED3F4" x="1536" y="1440" />
+		<entity schema="public" name="departments" color="D1BEF4" x="48" y="848" />
+		<entity schema="public" name="doctypes" color="C7F4BE" x="2160" y="848" />
+		<entity schema="public" name="documentations" color="C7F4BE" x="1952" y="848" />
+		<entity schema="public" name="eventchats" color="F4DDBE" x="1312" y="496" />
+		<entity schema="public" name="eventchecklists" color="F4DDBE" x="1072" y="496" />
+		<entity schema="public" name="eventfiles" color="F4DDBE" x="1312" y="784" />
+		<entity schema="public" name="eventhistories" color="C7F4BE" x="704" y="1360" />
+		<entity schema="public" name="events" color="C7F4BE" x="496" y="1360" />
+		<entity schema="public" name="events_users" color="C7F4BE" x="704" y="1616" />
+		<entity schema="public" name="eventstatuses" color="C7F4BE" x="496" y="1616" />
+		<entity schema="public" name="grouphardskills" color="F4DDBE" x="1280" y="1136" />
+		<entity schema="public" name="groupsoftskills" color="BED3F4" x="80" y="272" />
+		<entity schema="public" name="hardskills" color="F4DDBE" x="1072" y="912" />
+		<entity schema="public" name="historyactions" color="C7F4BE" x="2160" y="496" />
+		<entity schema="public" name="historylevels" color="C7F4BE" x="912" y="1360" />
+		<entity schema="public" name="leaves" color="F4DDBE" x="1136" y="1360" />
+		<entity schema="public" name="leavetypes" color="F4DDBE" x="1328" y="1360" />
+		<entity schema="public" name="notechecklists" color="BEBEF4" x="80" y="1584" />
+		<entity schema="public" name="notefiles" color="BEBEF4" x="272" y="1584" />
+		<entity schema="public" name="notes" color="BEBEF4" x="80" y="1360" />
+		<entity schema="public" name="notes_users" color="BEBEF4" x="272" y="1360" />
+		<entity schema="public" name="organizations" color="D1BEF4" x="256" y="848" />
+		<entity schema="public" name="otdels" color="D1BEF4" x="256" y="1104" />
+		<entity schema="public" name="positions" color="F4DDBE" x="528" y="704" />
+		<entity schema="public" name="projecthistories" color="C7F4BE" x="1952" y="496" />
+		<entity schema="public" name="projects" color="C7F4BE" x="1744" y="496" />
+		<entity schema="public" name="projectstatuses" color="C7F4BE" x="1536" y="672" />
+		<entity schema="public" name="projecttypes" color="C7F4BE" x="1552" y="848" />
+		<entity schema="public" name="projectusers" color="C7F4BE" x="1744" y="848" />
+		<entity schema="public" name="ranks" color="D1BEF4" x="1536" y="1136" />
+		<entity schema="public" name="softskills" color="BED3F4" x="96" y="80" />
+		<entity schema="public" name="tasks" color="BED3F4" x="1760" y="1360" />
+		<entity schema="public" name="taskstages" color="BED3F4" x="2160" y="1632" />
+		<entity schema="public" name="taskstatuses" color="BED3F4" x="1968" y="1632" />
+		<entity schema="public" name="userhardskills" color="F4DDBE" x="736" y="912" />
+		<entity schema="public" name="userhistorys" color="F4DDBE" x="496" y="912" />
+		<entity schema="public" name="users" color="F4DDBE" x="736" y="496" />
+		<entity schema="public" name="usersoftskills" color="BED3F4" x="272" y="80" />
+		<entity schema="public" name="works" color="BED3F4" x="1968" y="1360" />
+		<callout x="736" y="384" pointer="Round" >
+			<comment><![CDATA[Double-click table headers, columns, or foreign keys to edit. 
+Create multiple layouts (diagrams) with the same or different tables. 
+Saving the model to file will also save the layouts.]]></comment>
+		</callout>
+		<group name="ranks" color="F0ECF7" >
+			<entity schema="public" name="ranks" />
+		</group>
+		<group name="leaves" color="F7F2EC" >
+			<entity schema="public" name="leaves" />
+			<entity schema="public" name="leavetypes" />
+		</group>
+		<group name="softskills" color="ECF0F7" >
+			<entity schema="public" name="softskills" />
+			<entity schema="public" name="usersoftskills" />
+			<entity schema="public" name="groupsoftskills" />
+		</group>
+		<group name="departments" color="F0ECF7" >
+			<entity schema="public" name="departments" />
+			<entity schema="public" name="organizations" />
+			<entity schema="public" name="otdels" />
+		</group>
+		<group name="assignments" color="ECECF7" >
+			<entity schema="public" name="assignments" />
+			<entity schema="public" name="assignmentchats" />
+			<entity schema="public" name="assignmentfiles" />
+			<entity schema="public" name="assignmentstatuses" />
+		</group>
+		<group name="canbans" color="ECF0F7" >
+			<entity schema="public" name="canbans" />
+			<entity schema="public" name="canbanstages" />
+			<entity schema="public" name="canbans_users" />
+			<entity schema="public" name="canbanstages_notes" />
+		</group>
+		<group name="notes" color="ECECF7" >
+			<entity schema="public" name="notes" />
+			<entity schema="public" name="notes_users" />
+			<entity schema="public" name="notefiles" />
+			<entity schema="public" name="notechecklists" />
+		</group>
+		<group name="events" color="EEF7EC" >
+			<entity schema="public" name="events" />
+			<entity schema="public" name="eventhistories" />
+			<entity schema="public" name="events_users" />
+			<entity schema="public" name="historylevels" />
+			<entity schema="public" name="eventstatuses" />
+		</group>
+		<group name="tasks" color="ECF0F7" >
+			<entity schema="public" name="tasks" />
+			<entity schema="public" name="works" />
+			<entity schema="public" name="taskstatuses" />
+			<entity schema="public" name="assignmentlooses" />
+			<entity schema="public" name="canbanstages_tasks" />
+			<entity schema="public" name="taskstages" />
+		</group>
+		<group name="projects" color="EEF7EC" >
+			<entity schema="public" name="projects" />
+			<entity schema="public" name="projecthistories" />
+			<entity schema="public" name="documentations" />
+			<entity schema="public" name="projectusers" />
+			<entity schema="public" name="historyactions" />
+			<entity schema="public" name="doctypes" />
+			<entity schema="public" name="projecttypes" />
+			<entity schema="public" name="projectstatuses" />
+		</group>
+		<group name="users" color="F7F2EC" >
+			<entity schema="public" name="users" />
+			<entity schema="public" name="eventchecklists" />
+			<entity schema="public" name="hardskills" />
+			<entity schema="public" name="userhardskills" />
+			<entity schema="public" name="userhistorys" />
+			<entity schema="public" name="eventchats" />
+			<entity schema="public" name="eventfiles" />
+			<entity schema="public" name="grouphardskills" />
+			<entity schema="public" name="positions" />
+		</group>
+	</layout>
+</project>

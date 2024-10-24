@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkfront"]=self["webpackChunkfront"]||[]).push([[939],{90939:function(n,e,t){t.r(e),t.d(e,{default:function(){return a}});var r=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("div",[n._v(" Стратегии ")])},u=[],c={},f=c,l=t(43736),s=(0,l.Z)(f,r,u,!1,null,"9636cf6c",null),a=s.exports}}]);
+//# sourceMappingURL=939.0dae98cb.js.map
